@@ -1,0 +1,55 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block content %}
+
+    <div class="main-content" >
+    <style>
+        table, th, td { border:1px solid black;}
+    </style>
+        <h3>Edit TechMap</h3>
+        {% if techMaps is not null %}
+            {% for map in techMaps %}
+                <table style="width:100%">
+                    <form method="post" action="{{ path('edit') }}">
+                        <h1 name='mapId' type="text" value={{map.id}}>{{map.id}}</h1>
+                        <tr>
+                            <td>Название тех карты</td>
+                            <td><input name='mapInput' type="text" value={{map.Input}}></td>
+                        </tr>
+
+                {% for infoBlock in map.infoBlocks %}
+                        <tr>
+                            <td>Название 1 блока</td>
+                            <td><input name='blockNameInput' type="text" value={{infoBlock.blockName}}></td>
+                        </tr>
+
+                    {% for symbol in infoBlock.symbols %}
+                        {% if symbol.getClassName() == 'SymbolA' %}
+                        <tr>
+                            <td>название операции для символа А</td>
+                            <td>{{symbol.Operation.name}}</td>
+                        </tr>
+                            {% for equip in symbol.Operation.Equipments %}
+                        <tr>
+                            <td>{{equip.name}}</td>
+                            <td>название оборудования для операции выше</td>
+                        </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if symbol.getClassName() == 'SymbolB' %}
+                        <tr>
+                            <td>{{symbol.Equipment.name}}</td>
+                            <td>название оборудования для символа B</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %} 
+                {% endfor %}    
+            {% endfor %} 
+
+                        <button type="submit">Обновить</button>
+                    </form> 
+                </table>   
+    {% endif %} 
+    </div>
+{%  endblock %}
